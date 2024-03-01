@@ -10,6 +10,7 @@ interface GameProps {
 }
 
 export const Game = ({ onReshuffleGame }: GameProps) => {
+  //Confetti to show on correct answer
   const jsConfetti = useMemo(() => {
     if (typeof window === "undefined") return {} as JSConfetti;
 
@@ -26,17 +27,20 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
   const score = useGameStore((state) => state.score);
 
   const handleSelectBreed = (breed: Breed) => {
+    //Set the selected breed
     setSelectedItem(breed);
 
+    //Check if the selected breed is correct
     const isCorrect = breed.id === shuffledItems[correctOptionIndex].id;
 
+    //If correct, show confetti and increment score
     if (isCorrect) {
       jsConfetti.addConfetti({
         emojis: ["🌈", "🐈", "😻", "💫", "🏆", "🙌", "⭐"],
       });
       incrementScore();
     }
-
+    //Reset the game after 2 seconds
     setTimeout(resetGame, 2000);
   };
 

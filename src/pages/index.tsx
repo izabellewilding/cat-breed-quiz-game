@@ -10,18 +10,21 @@ export default function Home() {
   const setShuffledItems = useGameStore((state) => state.setShuffledItems);
   const setUsedOptions = useGameStore((state) => state.setUsedOptions);
 
+  //Fetch all breeds and their images
   const { data, isLoading, isError } = useQuery<Breed[]>({
     queryKey: ["breeds"],
     queryFn: async () => {
       const res = await fetch("https://api.thecatapi.com/v1/breeds?limit=30");
       const allBreeds = await res.json();
 
+      //Fetch image for each breed
       const allBreedsWithImages = await Promise.all(
         allBreeds.map(async (breed: Breed) => {
           const res = await fetch(
             `https://api.thecatapi.com/v1/images/search?breed_id=${breed.id}`
           );
           const images = await res.json();
+          //Return breed with image
           return { id: breed.id, name: breed.name, imageUrl: images[0].url };
         })
       );
