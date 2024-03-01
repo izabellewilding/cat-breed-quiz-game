@@ -8,6 +8,7 @@ import { useGameStore } from "@/store";
 
 export default function Home() {
   const setShuffledItems = useGameStore((state) => state.setShuffledItems);
+  const shuffledItems = useGameStore((state) => state.shuffledItems);
   const setUsedOptions = useGameStore((state) => state.setUsedOptions);
 
   //Fetch all breeds and their images
@@ -29,11 +30,15 @@ export default function Home() {
         })
       );
 
-      setShuffledItems(allBreedsWithImages);
-
       return allBreedsWithImages;
     },
   });
+
+  useEffect(() => {
+    if (data && !shuffledItems.length) {
+      setShuffledItems(data);
+    }
+  }, [data, setShuffledItems, shuffledItems]);
 
   const onReshuffleGame = (prevOption: Breed) => {
     setUsedOptions(prevOption);

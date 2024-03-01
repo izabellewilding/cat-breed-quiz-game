@@ -26,12 +26,14 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
   const incrementScore = useGameStore((state) => state.incrementScore);
   const score = useGameStore((state) => state.score);
 
+  const correctOption = shuffledItems[correctOptionIndex];
+
   const handleSelectBreed = (breed: Breed) => {
     //Set the selected breed
     setSelectedItem(breed);
 
     //Check if the selected breed is correct
-    const isCorrect = breed.id === shuffledItems[correctOptionIndex].id;
+    const isCorrect = breed.id === correctOption?.id;
 
     //If correct, show confetti and increment score
     if (isCorrect) {
@@ -46,7 +48,7 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
 
   const resetGame = () => {
     setSelectedItem(null);
-    onReshuffleGame(shuffledItems[correctOptionIndex]);
+    onReshuffleGame(correctOption);
   };
 
   return (
@@ -66,8 +68,8 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
       </div>
       <div className="p-6 grid gap-4 items-center justify-center">
         <Image
-          key={shuffledItems[correctOptionIndex].id}
-          src={shuffledItems[correctOptionIndex].imageUrl}
+          key={correctOption?.id}
+          src={correctOption?.imageUrl}
           alt="Cat"
           width="300"
           height="200"
@@ -78,8 +80,7 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
             <Button
               key={breed.id}
               variant={
-                selectedItem &&
-                breed.id === shuffledItems[correctOptionIndex].id
+                selectedItem && breed.id === correctOption?.id
                   ? "correct"
                   : selectedItem && breed.id === selectedItem.id
                   ? "incorrect"
