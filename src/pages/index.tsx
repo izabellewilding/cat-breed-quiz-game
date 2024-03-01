@@ -1,13 +1,9 @@
 import Image from "next/image";
+import { useState } from "react";
 import { Inter } from "next/font/google";
 import { Card } from "@/components/card";
 import { useQuery } from "@tanstack/react-query";
-
-export interface Breed {
-  id: string;
-  name: string;
-  imageUrl: string;
-}
+import { Breed } from "../../types/types";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +15,11 @@ function getRandomItems(data: Breed[], count: number) {
 }
 
 export default function Home() {
+  const [shuffledItems, setShuffledItems] = useState<Breed[]>([]);
+  // list of used answers
+  // score of the game
+  /// current questions
+
   const { data, isLoading, isError } = useQuery<Breed[]>({
     queryKey: ["breeds"],
     queryFn: async () => {
@@ -41,12 +42,18 @@ export default function Home() {
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
 
+  const onReshuffleGame = () => {
+    setShuffledItems(getRandomItems(data || [], 4));
+  };
+
   const randomItems = getRandomItems(data || [], 4);
-  console.log(randomItems, "RANDOM");
   return (
     <main className="h-screen flex justify-center">
-      {JSON.stringify(data, null, 2)}
-      {/* <Card items={randomItems} /> */}
+      <Card
+        options={randomItems}
+        correctOption={randomItems[0]}
+        onReshuffleGame={onReshuffleGame}
+      />
     </main>
   );
 }
