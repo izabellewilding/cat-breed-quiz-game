@@ -8,15 +8,12 @@ import { useGameStore } from "@/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
-}
-
 export default function Home() {
   const shuffledItems = useGameStore((state) => state.shuffledItems);
   const setShuffledItems = useGameStore((state) => state.setShuffledItems);
   const usedOptions = useGameStore((state) => state.usedOptions);
   const setUsedOptions = useGameStore((state) => state.setUsedOptions);
+  const correctOptionIndex = useGameStore((state) => state.correctOptionIndex);
 
   const { data, isLoading, isError } = useQuery<Breed[]>({
     queryKey: ["breeds"],
@@ -56,7 +53,7 @@ export default function Home() {
     <main className="h-screen flex justify-center">
       <Card
         options={shuffledItems}
-        correctOption={shuffledItems[getRandomInt(4)]}
+        correctOption={shuffledItems[correctOptionIndex]}
         onReshuffleGame={onReshuffleGame}
       />
     </main>
