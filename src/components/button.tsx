@@ -8,11 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-gray-200",
-        selected:
-          " bg-gray-300 text-primary-foreground shadow hover:bg-gray-200",
+        default: "bg-primary shadow hover:bg-gray-200",
+        selected: " bg-gray-300 shadow hover:bg-gray-200",
 
-        correct: "border border-input bg-green-500 shadow-sm",
+        correct: "border bg-green-500 shadow-sm",
         incorrect: "bg-secondary bg-red-500 shadow-sm ",
       },
     },
