@@ -17,12 +17,18 @@ export const Card = ({
 }: CardProps) => {
   const [selected, setSelected] = useState<Breed | null>(null);
   const [correct, setCorrect] = useState<boolean>(false);
+  const [score, setScore] = useState<number>(0);
 
   const handleSelectBreed = (breed: Breed) => {
     setSelected(breed);
+
     const isCorrect = breed.id === correctOption.id;
+
     setCorrect(isCorrect);
 
+    if (isCorrect) {
+      setScore((prev) => prev + 1);
+    }
     setTimeout(resetGame, 2000);
   };
 

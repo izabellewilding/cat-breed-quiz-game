@@ -4,13 +4,15 @@ import { Inter } from "next/font/google";
 import { Card } from "@/components/card";
 import { useQuery } from "@tanstack/react-query";
 import { Breed } from "../../types/types";
+import { useGameStore } from "@/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
-function getRandomItems(data: Breed[], count: number, useOptions: Breed[]) {
+function getRandomItems(data: Breed[], count: number, usedOptions: Breed[]) {
   //Filter out the used options from the data array
+  console.warn("usedOptions", usedOptions);
   const availableOptions = data.filter(
-    (option) => !useOptions.some((used) => used.id === option.id)
+    (option) => !usedOptions.some((used) => used.id === option.id)
   );
   // Shuffle the array
   const shuffledData = [...availableOptions].sort(() => Math.random() - 0.5);
@@ -19,8 +21,10 @@ function getRandomItems(data: Breed[], count: number, useOptions: Breed[]) {
 }
 
 export default function Home() {
-  const [shuffledItems, setShuffledItems] = useState<Breed[]>([]);
-  const [usedOptions, setUsedOptions] = useState<Breed[]>([]);
+  const shuffledItems = useGameStore((state) => state.shuffledItems);
+  const setShuffledItems = useGameStore((state) => state.setShuffledItems);
+  const usedOptions = useGameStore((state) => state.usedOptions);
+  const setUsedOptions = useGameStore((state) => state.setUsedOptions);
 
   const { data, isLoading, isError } = useQuery<Breed[]>({
     queryKey: ["breeds"],
@@ -49,7 +53,7 @@ export default function Home() {
   if (isError) return <div>Error fetching data</div>;
 
   const onReshuffleGame = (prevOption: Breed) => {
-    setUsedOptions((prev) => [...prev, prevOption]);
+    setUsedOptions(prevOption);
     setShuffledItems(getRandomItems(data || [], 4, usedOptions));
   };
 
