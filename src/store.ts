@@ -1,11 +1,7 @@
 import { create } from "zustand";
-import { Breed } from "../types/types";
-import {
-  persist,
-  createJSONStorage,
-  subscribeWithSelector,
-} from "zustand/middleware";
-import { share, isSupported } from "shared-zustand";
+import { Breed } from "./types";
+import { persist, subscribeWithSelector } from "zustand/middleware";
+import { share } from "shared-zustand";
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
@@ -77,29 +73,24 @@ export const useGameStore = create(
 );
 
 // progressive enhancement check.
-if ("BroadcastChannel" in globalThis /* || isSupported() */) {
+if ("BroadcastChannel" in globalThis) {
   share("score", useGameStore, {
-    // if set to true this tab trys to immediately recover the shared state from another tab.
     initialize: true,
   });
 
   share("correctOptionIndex", useGameStore, {
-    // if set to true this tab trys to immediately recover the shared state from another tab.
     initialize: true,
   });
 
   share("selectedItem", useGameStore, {
-    // if set to true this tab trys to immediately recover the shared state from another tab.
     initialize: true,
   });
 
   share("shuffledItems", useGameStore, {
-    // if set to true this tab trys to immediately recover the shared state from another tab.
     initialize: true,
   });
 
   share("usedOptions", useGameStore, {
-    // if set to true this tab trys to immediately recover the shared state from another tab.
     initialize: true,
   });
 }

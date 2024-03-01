@@ -1,19 +1,14 @@
 import Image from "next/image";
 import { useEffect } from "react";
 import { Inter } from "next/font/google";
-import { Card } from "@/components/card";
+import { Game } from "@/components/game";
 import { useQuery } from "@tanstack/react-query";
-import { Breed } from "../../types/types";
+import { Breed } from "../types";
 import { useGameStore } from "@/store";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function Home() {
-  const shuffledItems = useGameStore((state) => state.shuffledItems);
   const setShuffledItems = useGameStore((state) => state.setShuffledItems);
-  const usedOptions = useGameStore((state) => state.usedOptions);
   const setUsedOptions = useGameStore((state) => state.setUsedOptions);
-  const correctOptionIndex = useGameStore((state) => state.correctOptionIndex);
 
   const { data, isLoading, isError } = useQuery<Breed[]>({
     queryKey: ["breeds"],
@@ -31,18 +26,11 @@ export default function Home() {
         })
       );
 
+      setShuffledItems(allBreedsWithImages);
+
       return allBreedsWithImages;
     },
   });
-
-  useEffect(() => {
-    if (data && !shuffledItems.length) {
-      setShuffledItems(data);
-    }
-  }, [data, setShuffledItems, shuffledItems, usedOptions]);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error fetching data</div>;
 
   const onReshuffleGame = (prevOption: Breed) => {
     setUsedOptions(prevOption);
@@ -51,11 +39,9 @@ export default function Home() {
 
   return (
     <main className="h-screen flex justify-center">
-      <Card
-        options={shuffledItems}
-        correctOption={shuffledItems[correctOptionIndex]}
-        onReshuffleGame={onReshuffleGame}
-      />
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>Error fetching data</div>}
+      {data && <Game onReshuffleGame={onReshuffleGame} />}
     </main>
   );
 }
