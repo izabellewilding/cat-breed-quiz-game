@@ -7,7 +7,7 @@ import { useState } from "react";
 interface CardProps {
   options: Breed[];
   correctOption: Breed;
-  onReshuffleGame: () => void;
+  onReshuffleGame: (arg: Breed) => void;
 }
 
 export const Card = ({
@@ -28,7 +28,7 @@ export const Card = ({
 
   const resetGame = () => {
     setSelected(null);
-    onReshuffleGame();
+    onReshuffleGame(correctOption);
   };
 
   return (
@@ -43,6 +43,7 @@ export const Card = ({
       </div>
       <div className="p-6 grid gap-4 items-center justify-center">
         <Image
+          key={correctOption.id}
           src={correctOption.imageUrl}
           alt="Cat"
           width="300"
