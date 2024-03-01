@@ -42,5 +42,6 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 ## Improvements (Given more time)
 
 - Add some test with React Testing Library
-- Animations & transition between rounds
+- Animate next game round in with a transition or effect 
 - Animate the score
+- Some fun sound effects!
