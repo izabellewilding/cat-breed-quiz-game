@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Inter } from "next/font/google";
 import { Card } from "@/components/card";
 import { useQuery } from "@tanstack/react-query";
@@ -42,12 +42,15 @@ export default function Home() {
         })
       );
 
-      setShuffledItems(
-        getRandomItems(allBreedsWithImages || [], 4, usedOptions)
-      );
       return allBreedsWithImages;
     },
   });
+
+  useEffect(() => {
+    if (data) {
+      setShuffledItems(getRandomItems(data, 4, usedOptions));
+    }
+  }, [data, setShuffledItems, usedOptions]);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
