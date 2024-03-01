@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Inter } from "next/font/google";
 import { Card } from "@/components/card";
 import { useQuery } from "@tanstack/react-query";
@@ -8,16 +8,8 @@ import { useGameStore } from "@/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
-function getRandomItems(data: Breed[], count: number, usedOptions: Breed[]) {
-  //Filter out the used options from the data array
-  console.warn("usedOptions", usedOptions);
-  const availableOptions = data.filter(
-    (option) => !usedOptions.some((used) => used.id === option.id)
-  );
-  // Shuffle the array
-  const shuffledData = [...availableOptions].sort(() => Math.random() - 0.5);
-  // Return the first 'count' items
-  return shuffledData.slice(0, count);
+function getRandomInt(max: number) {
+  return Math.floor(Math.random() * max);
 }
 
 export default function Home() {
@@ -29,7 +21,7 @@ export default function Home() {
   const { data, isLoading, isError } = useQuery<Breed[]>({
     queryKey: ["breeds"],
     queryFn: async () => {
-      const res = await fetch("https://api.thecatapi.com/v1/breeds?limit=20");
+      const res = await fetch("https://api.thecatapi.com/v1/breeds?limit=30");
       const allBreeds = await res.json();
 
       const allBreedsWithImages = await Promise.all(
@@ -47,25 +39,24 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (data) {
-      setShuffledItems(getRandomItems(data, 4, usedOptions));
+    if (data && !shuffledItems.length) {
+      setShuffledItems(data);
     }
-  }, [data, setShuffledItems, usedOptions]);
+  }, [data, setShuffledItems, shuffledItems, usedOptions]);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching data</div>;
 
   const onReshuffleGame = (prevOption: Breed) => {
     setUsedOptions(prevOption);
-    setShuffledItems(getRandomItems(data || [], 4, usedOptions));
+    setShuffledItems(data || []);
   };
 
-  // const randomItems = getRandomItems(data || [], 4, usedOptions);
   return (
     <main className="h-screen flex justify-center">
       <Card
         options={shuffledItems}
-        correctOption={shuffledItems[0]}
+        correctOption={shuffledItems[getRandomInt(4)]}
         onReshuffleGame={onReshuffleGame}
       />
     </main>
