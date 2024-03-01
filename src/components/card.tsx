@@ -1,7 +1,14 @@
 import Image from "next/image";
 import { Button } from "./button";
 
-export const Card = () => {
+interface CardProps {
+  items: {
+    url: string;
+    breeds: any;
+  };
+}
+
+export const Card = ({ items }: CardProps) => {
   return (
     <div className="rounded-lg border bg-card shadow-sm max-w-96 m-auto">
       <div className="flex flex-col space-y-1.5 p-6">
