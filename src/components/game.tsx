@@ -10,7 +10,7 @@ interface GameProps {
 }
 
 export const Game = ({ onReshuffleGame }: GameProps) => {
-  //Confetti to show on correct answer
+  //JSConfetti instance
   const jsConfetti = useMemo(() => {
     if (typeof window === "undefined") return {} as JSConfetti;
 
