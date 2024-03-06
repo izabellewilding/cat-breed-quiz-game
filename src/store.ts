@@ -12,8 +12,8 @@ interface GameState {
   setShuffledItems: (items: Breed[]) => void;
   usedOptions: Breed[];
   setUsedOptions: (prevOption: Breed) => void;
-  selectedItem: Breed | null;
-  setSelectedItem: (breed: Breed | null) => void;
+  selectedItem: string | null;
+  setSelectedItem: (id: string | null) => void;
   score: number;
   incrementScore: () => void;
   correctOptionIndex: number;
@@ -60,7 +60,7 @@ export const useGameStore = create(
           }));
         },
         selectedItem: null,
-        setSelectedItem: (breed) => set({ selectedItem: breed }),
+        setSelectedItem: (id) => set({ selectedItem: id }),
         score: 0,
         incrementScore: () =>
           set((state) => ({ ...state, score: state.score + 1 })),

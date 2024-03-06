@@ -30,7 +30,7 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
 
   const handleSelectBreed = (breed: Breed) => {
     //Set the selected breed
-    setSelectedItem(breed);
+    setSelectedItem(breed.id);
 
     //Check if the selected breed is correct
     const isCorrect = breed.id === correctOption?.id;
@@ -62,7 +62,7 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
             Score: {score}
           </p>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm">
           Select the correct breed of the cat in the image.
         </p>
       </div>
@@ -82,7 +82,7 @@ export const Game = ({ onReshuffleGame }: GameProps) => {
               variant={
                 selectedItem && breed.id === correctOption?.id
                   ? "correct"
-                  : selectedItem && breed.id === selectedItem.id
+                  : selectedItem && breed.id === selectedItem
                   ? "incorrect"
                   : "default"
               }
