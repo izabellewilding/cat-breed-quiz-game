@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { useEffect } from "react";
-import { Inter } from "next/font/google";
 import { Game } from "@/components/game";
 import { useQuery } from "@tanstack/react-query";
 import { Breed } from "../types";
